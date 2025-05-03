@@ -1,52 +1,54 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8" />
     <title>AR Navigation Demo</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/2.0.1/aframe/build/aframe-ar.min.js"></script>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.2/aframe/build/aframe-ar.min.js"></script>
     <style>
-      body { margin: 0; overflow: hidden; }
+      #menu {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 10px;
+        border-radius: 8px;
+        z-index: 10;
+      }
+      button {
+        margin: 5px;
+        padding: 10px;
+        font-size: 14px;
+      }
     </style>
   </head>
-  <body>
-    <a-scene embedded arjs>
+
+  <body style="margin: 0; overflow: hidden">
+    <!-- منو انتخاب مقصد -->
+    <div id="menu">
+      <button onclick="selectDestination('event-hall')">سالن ایونت</button>
+      <button onclick="selectDestination('toilet')">سرویس بهداشتی</button>
+      <button onclick="selectDestination('booth')">غرفه‌ها</button>
+    </div>
+
+    <!-- صحنه AR -->
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+      <!-- فلش‌ها در موقعیت‌های ثابت (برای تست داخل) -->
+      <a-box id="event-hall" position="0 0 -5" color="red" visible="false"></a-box>
+      <a-box id="toilet" position="2 0 -5" color="blue" visible="false"></a-box>
+      <a-box id="booth" position="-2 0 -5" color="green" visible="false"></a-box>
       
-      <!-- دوربین -->
-      <a-camera gps-camera rotation-reader></a-camera>
-
-      <!-- فلش‌ها به سمت مکان‌ها -->
-      <a-entity
-        gps-entity-place="latitude: 35.70001; longitude: 51.40901"
-        look-at="[gps-camera]"
-        scale="10 10 10">
-        <a-box color="red" depth="1" height="1" width="3"></a-box>
-        <a-text value="سالن ایونت" position="0 1.5 0" align="center" color="#fff"></a-text>
-      </a-entity>
-
-      <a-entity
-        gps-entity-place="latitude: 35.70005; longitude: 51.40905"
-        look-at="[gps-camera]"
-        scale="10 10 10">
-        <a-box color="blue" depth="1" height="1" width="3"></a-box>
-        <a-text value="سرویس بهداشتی" position="0 1.5 0" align="center" color="#fff"></a-text>
-      </a-entity>
-
-      <a-entity
-        gps-entity-place="latitude: 35.70008; longitude: 51.40908"
-        look-at="[gps-camera]"
-        scale="10 10 10">
-        <a-box color="green" depth="1" height="1" width="3"></a-box>
-        <a-text value="غرفه‌ها" position="0 1.5 0" align="center" color="#fff"></a-text>
-      </a-entity>
-
-      <a-entity
-        gps-entity-place="latitude: 35.70012; longitude: 51.40912"
-        look-at="[gps-camera]"
-        scale="10 10 10">
-        <a-box color="orange" depth="1" height="1" width="3"></a-box>
-        <a-text value="پارکینگ" position="0 1.5 0" align="center" color="#fff"></a-text>
-      </a-entity>
-
+      <a-camera></a-camera>
     </a-scene>
+
+    <!-- اسکریپت کنترل انتخاب مقصد -->
+    <script>
+      function selectDestination(id) {
+        ['event-hall', 'toilet', 'booth'].forEach(elId => {
+          document.getElementById(elId).setAttribute('visible', false);
+        });
+        document.getElementById(id).setAttribute('visible', true);
+      }
+    </script>
   </body>
 </html>
